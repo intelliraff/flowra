@@ -72,7 +72,7 @@ function initializeApp() {
 
     // Listen for hash changes
     window.addEventListener('hashchange', handleHashNavigation);
-    
+
     // Check for hash on page load
     handleHashNavigation();
 
@@ -118,7 +118,7 @@ function initializeApp() {
         btn.addEventListener('mouseenter', function() {
             this.style.transform = 'translateY(-2px)';
         });
-        
+
         btn.addEventListener('mouseleave', function() {
             this.style.transform = 'translateY(0)';
         });
@@ -129,7 +129,7 @@ function initializeApp() {
         card.addEventListener('mouseenter', function() {
             this.style.transform = 'translateY(-8px)';
         });
-        
+
         card.addEventListener('mouseleave', function() {
             this.style.transform = 'translateY(0)';
         });
@@ -143,7 +143,7 @@ function initializeApp() {
     // Add loading animation
     document.body.style.opacity = '0';
     document.body.style.transition = 'opacity 0.5s ease';
-    
+
     setTimeout(() => {
         document.body.style.opacity = '1';
     }, 100);
@@ -185,8 +185,80 @@ const FlowraAPI = {
             console.error('Error sending sensor data:', error);
             return { error: 'Failed to send sensor data' };
         }
+    },
+
+    // Fetch Blynk sensor data
+    async fetchBlynkData(token = '', pin = 'V0') {
+        try {
+            // Only include token in URL if provided
+            const tokenParam = token ? `&token=${encodeURIComponent(token)}` : '';
+            const response = await fetch(`/api/fetch-blynk?pin=${encodeURIComponent(pin)}${tokenParam}`);
+            const data = await response.json();
+            return data;
+        } catch (error) {
+            console.error('Error fetching Blynk data:', error);
+            return { error: 'Failed to fetch Blynk data' };
+        }
     }
 };
+
+// Global function to fetch Blynk data and update display
+async function fetchBlynkData() {
+    const token = document.getElementById('blynk-token').value.trim();
+    const pin = document.getElementById('blynk-pin').value.trim() || 'V0';
+    const statusDiv = document.getElementById('blynk-status');
+
+    // Show loading state
+    statusDiv.innerHTML = '<div class="loading-message"><i class="fas fa-spinner fa-spin"></i> Fetching sensor data...</div>';
+    statusDiv.className = 'status-message loading';
+
+    // Disable button during fetch
+    const button = event.target.closest('button');
+    if (button) {
+        button.disabled = true;
+        button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Fetching...';
+    }
+
+    try {
+        const result = await FlowraAPI.fetchBlynkData(token, pin);
+
+        if (result.success) {
+            // Update sensor value display
+            document.getElementById('sensor-value').textContent = result.sensor_value;
+            document.getElementById('sensor-status').textContent = 'Online';
+            document.getElementById('sensor-status').style.color = '#00d2ff';
+
+            // Update last update time
+            const timestamp = new Date(result.timestamp);
+            document.getElementById('last-update').textContent = timestamp.toLocaleTimeString();
+
+            // Show success message
+            const tokenSource = token ? 'provided token' : 'server configuration';
+            statusDiv.innerHTML = `<div class="success-message"><i class="fas fa-check-circle"></i> Sensor data fetched successfully! Value: ${result.sensor_value} (${result.pin}) using ${tokenSource}</div>`;
+            statusDiv.className = 'status-message success';
+
+            console.log('Blynk data fetched:', result);
+        } else {
+            // Show error message
+            document.getElementById('sensor-status').textContent = 'Error';
+            document.getElementById('sensor-status').style.color = '#ff4757';
+
+            statusDiv.innerHTML = `<div class="error-message"><i class="fas fa-exclamation-triangle"></i> ${result.error}</div>`;
+            statusDiv.className = 'status-message error';
+        }
+    } catch (error) {
+        statusDiv.innerHTML = `<div class="error-message"><i class="fas fa-exclamation-triangle"></i> Failed to fetch data: ${error.message}</div>`;
+        statusDiv.className = 'status-message error';
+        document.getElementById('sensor-status').textContent = 'Offline';
+        document.getElementById('sensor-status').style.color = '#ff4757';
+    } finally {
+        // Re-enable button
+        if (button) {
+            button.disabled = false;
+            button.innerHTML = '<i class="fas fa-download"></i> Fetch Data';
+        }
+    }
+}
 
 // Make API available globally
 window.FlowraAPI = FlowraAPI;

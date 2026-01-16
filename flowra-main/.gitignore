@@ -1,0 +1,32 @@
+# Python
+*.pyc
+__pycache__/
+.env
+.env.*
+.venv/
+venv/
+.Python
+
+# SQLite DBs (local/dev)
+backendd/water_alert.db
+*.db
+*.sqlite3
+
+# IDEs
+.vscode/
+.idea/
+
+# Node / frontend
+node_modules/
+templates/build/
+docs/
+build/
+
+# OS
+.DS_Store
+
+# Logs
+*.log
+
+# Others
+pip-wheel-metadata/

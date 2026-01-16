@@ -1,0 +1,235 @@
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+/* Custom styles and animations */
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    font-family: 'Outfit', sans-serif;
+    background: linear-gradient(135deg, #03045e 0%, #0077b6 100%);
+    color: white;
+    overflow-x: hidden;
+    position: relative;
+    min-height: 100vh;
+  }
+}
+
+@layer components {
+  /* Background Effects */
+  .blur-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -2;
+    background:
+      radial-gradient(circle at 20% 80%, rgba(0, 180, 216, 0.05) 0%, transparent 50%),
+      radial-gradient(circle at 80% 20%, rgba(144, 224, 239, 0.05) 0%, transparent 50%);
+  }
+
+  .glow-arc {
+    position: fixed;
+    width: 800px;
+    height: 800px;
+    border-radius: 50%;
+    z-index: -1;
+    animation: float 8s ease-in-out infinite;
+    opacity: 0.6;
+  }
+
+  .glow-arc.top {
+    top: -400px;
+    right: -400px;
+    background: radial-gradient(circle, rgba(0, 180, 216, 0.08) 0%, transparent 70%);
+  }
+
+  .glow-arc.bottom {
+    bottom: -400px;
+    left: -400px;
+    background: radial-gradient(circle, rgba(144, 224, 239, 0.08) 0%, transparent 70%);
+    animation-delay: -4s;
+  }
+
+  /* Navigation */
+  .nav-pill {
+    position: fixed;
+    top: 15px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(3, 4, 94, 0.85);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(0, 180, 216, 0.3);
+    border-radius: 50px;
+    padding: 10px 20px;
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    z-index: 1000;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(0, 180, 216, 0.2);
+  }
+
+  /* Seed of Life Logo */
+  .seed-of-life {
+    position: relative;
+    width: 32px;
+    height: 32px;
+  }
+
+  .seed-of-life .circle {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background: #00b4d8;
+    border-radius: 50%;
+    box-shadow: 0 0 15px rgba(0, 180, 216, 0.5);
+  }
+
+  .seed-of-life .circle:nth-child(1) { top: 0; left: 50%; transform: translateX(-50%); }
+  .seed-of-life .circle:nth-child(2) { top: 25%; right: 0; }
+  .seed-of-life .circle:nth-child(3) { bottom: 25%; right: 0; }
+  .seed-of-life .circle:nth-child(4) { bottom: 0; left: 50%; transform: translateX(-50%); }
+  .seed-of-life .circle:nth-child(5) { bottom: 25%; left: 0; }
+  .seed-of-life .circle:nth-child(6) { top: 25%; left: 0; }
+  .seed-of-life .circle:nth-child(7) { top: 50%; left: 50%; transform: translate(-50%, -50%); }
+
+  /* Buttons */
+  .btn-primary {
+    @apply bg-flowra-500 text-white px-8 py-3 rounded-full font-semibold transition-all duration-300 shadow-lg hover:shadow-xl border-none cursor-pointer;
+    box-shadow: 0 0 20px rgba(0, 180, 216, 0.3);
+  }
+
+  .btn-primary:hover {
+    @apply bg-flowra-400;
+    transform: translateY(-2px);
+    box-shadow: 0 0 30px rgba(0, 180, 216, 0.5);
+  }
+
+  .btn-outline {
+    @apply bg-transparent text-white px-8 py-3 rounded-full font-semibold transition-all duration-300 border-2 border-flowra-300 cursor-pointer;
+  }
+
+  .btn-outline:hover {
+    @apply bg-flowra-100 bg-opacity-10 border-flowra-500;
+    box-shadow: 0 0 20px rgba(0, 180, 216, 0.3);
+  }
+
+  /* Cards */
+  .glass-card {
+    @apply bg-white bg-opacity-5 backdrop-blur-xl border border-white border-opacity-10 rounded-3xl shadow-2xl;
+  }
+
+  .stat-card {
+    @apply glass-card p-6 text-center transition-all duration-300;
+  }
+
+  .stat-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 0 20px rgba(0, 180, 216, 0.3);
+    @apply border-flowra-500;
+  }
+
+  /* Page Container */
+  .page-container {
+    min-height: 100vh;
+    padding-top: 100px;
+    padding-bottom: 2rem;
+  }
+
+  /* Map marker pulse animation */
+  @keyframes pulse {
+    0%, 100% {
+      transform: scale(1);
+      opacity: 1;
+    }
+    50% {
+      transform: scale(1.1);
+      opacity: 0.9;
+    }
+  }
+
+  /* Content Sections */
+  .content-section {
+    min-height: 70vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 40px 20px;
+  }
+
+  /* Blynk-Style Widgets */
+  .blynk-widget {
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease;
+  }
+
+  .blynk-widget::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+  }
+
+  .blynk-widget:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+  }
+
+  .blynk-widget:hover::before {
+    animation: shimmer 2s infinite;
+  }
+
+  @keyframes shimmer {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+  }
+
+  /* Blynk-specific widget styles */
+  .blynk-widget {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+  }
+
+  .blynk-widget:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  }
+
+  /* Status indicators */
+  .status-indicator {
+    position: relative;
+  }
+
+  .status-indicator::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 8px;
+    height: 8px;
+    background: #10B981;
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+    50% {
+      opacity: 0.7;
+      transform: scale(1.1);
+    }
+  }
+}
