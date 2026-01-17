@@ -170,5 +170,3 @@ Sensors → LoRa Mesh (Offline) → Gateway → Blynk Cloud → Flask API → Re
 * Mobile application for field engineers
 
 ---
-
-Just tell me what you’d like next 🚀
